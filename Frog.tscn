@@ -1,0 +1,131 @@
+[gd_scene load_steps=19 format=3 uid="uid://8u5bckfdgfv1"]
+
+[ext_resource type="Script" path="res://Frog.gd" id="1_4tiyn"]
+[ext_resource type="Texture2D" uid="uid://fq51whi8wele" path="res://sprites/frog/idle/frog-idle-1.png" id="1_epn2x"]
+[ext_resource type="Texture2D" uid="uid://82pueqv17jbk" path="res://sprites/enemy-death/enemy-death-1.png" id="2_chsns"]
+[ext_resource type="Texture2D" uid="uid://bw0axg0l1ny50" path="res://sprites/frog/idle/frog-idle-2.png" id="2_r1jw5"]
+[ext_resource type="Texture2D" uid="uid://cldhjt2prg7bm" path="res://sprites/enemy-death/enemy-death-2.png" id="3_0ljap"]
+[ext_resource type="Texture2D" uid="uid://bl0qnydw1d5r2" path="res://sprites/frog/idle/frog-idle-3.png" id="3_agbrb"]
+[ext_resource type="Texture2D" uid="uid://r5fkoqo7csn5" path="res://sprites/enemy-death/enemy-death-3.png" id="4_gw4hy"]
+[ext_resource type="Texture2D" uid="uid://byhhclub0sqye" path="res://sprites/frog/idle/frog-idle-4.png" id="4_k7gwx"]
+[ext_resource type="Texture2D" uid="uid://d3g3vi0ox1w1w" path="res://sprites/enemy-death/enemy-death-4.png" id="5_cr5bq"]
+[ext_resource type="Texture2D" uid="uid://cxcrcb70xdrlk" path="res://sprites/frog/jump/frog-jump-1.png" id="5_ovlgb"]
+[ext_resource type="Texture2D" uid="uid://bqdkc0t88l5tj" path="res://sprites/frog/jump/frog-jump-2.png" id="6_nbo27"]
+[ext_resource type="Texture2D" uid="uid://b5iwhrbkk005h" path="res://sprites/enemy-death/enemy-death-5.png" id="6_rbrcw"]
+[ext_resource type="Texture2D" uid="uid://bahev5hqffi0h" path="res://sprites/enemy-death/enemy-death-6.png" id="7_v2mdo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2d7uh"]
+size = Vector2(20, 12)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_j8ydy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_chsns")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_0ljap")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_gw4hy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_cr5bq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_rbrcw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_v2mdo")
+}],
+"loop": false,
+"name": &"Death",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_epn2x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_r1jw5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_agbrb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_k7gwx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_epn2x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_epn2x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_epn2x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_epn2x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_epn2x")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_ovlgb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_nbo27")
+}],
+"loop": true,
+"name": &"Jump",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2d1vr"]
+radius = 60.531
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hescs"]
+size = Vector2(15, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kvyju"]
+size = Vector2(25, 9)
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+script = ExtResource("1_4tiyn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_2d7uh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(1, -11)
+sprite_frames = SubResource("SpriteFrames_j8ydy")
+animation = &"Idle"
+
+[node name="PlayerDetection" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetection"]
+shape = SubResource("CircleShape2D_2d1vr")
+
+[node name="PlayerDeath" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDeath"]
+position = Vector2(0.5, -6.5)
+shape = SubResource("RectangleShape2D_hescs")
+
+[node name="PlayerCollision" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCollision"]
+position = Vector2(0.5, -4.5)
+shape = SubResource("RectangleShape2D_kvyju")
+
+[connection signal="body_entered" from="PlayerDetection" to="." method="_on_player_detection_body_entered"]
+[connection signal="body_exited" from="PlayerDetection" to="." method="_on_player_detection_body_exited"]
+[connection signal="body_entered" from="PlayerDeath" to="." method="_on_player_death_body_entered"]
+[connection signal="body_entered" from="PlayerCollision" to="." method="_on_player_collision_body_entered"]
